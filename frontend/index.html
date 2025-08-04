@@ -3,10 +3,56 @@
 <html>
 <head>
   <title>Smart Agent</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 30px;
+      color: #333;
+    }
+
+    h2, h3, h4 {
+      color: #2c3e50;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 600px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: vertical;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    pre {
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 5px;
+      max-width: 600px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
 </head>
 <body>
   <h2>Enter your problem (in Hindi or English)</h2>
-  <textarea id="message" rows="6" cols="60"></textarea><br>
+  <textarea id="message" rows="6" placeholder="Type your complaint here... (in Hindi or English) / अपनी शिकायत यहाँ लिखें (हिंदी या अंग्रेज़ी में)"></textarea><br>
   <button onclick="submitQuery()">Submit</button>
 
   <h3>Formal Email (English)</h3>
@@ -20,10 +66,12 @@
   <script>
     async function submitQuery() {
       const message = document.getElementById("message").value;
-      const response = await fetch("http://localhost:8000/process", {
+      const response = await fetch("http://127.0.0.1:8000/process", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({message})
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: message })
       });
       const data = await response.json();
       document.getElementById("english").innerText = data.english_draft;
@@ -33,3 +81,41 @@
   </script>
 </body>
 </html>
+
+<!-- frontend/index.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Agent</title>
+</head>
+<body>
+  <h2>Enter your problem (in Hindi or English)</h2>
+  <textarea id="message" rows="6" cols="60" placeholder="Type your complaint here... (in Hindi or English) / अपनी शिकायत यहाँ लिखें (हिंदी या अंग्रेज़ी में)"></textarea><br>
+  <button onclick="submitQuery()">Submit</button>
+
+  <h3>Formal Email (English)</h3>
+  <pre id="english"></pre>
+
+  <h3>Formal Email (Hindi)</h3>
+  <pre id="hindi"></pre>
+
+  <h4>Email will be sent to: <span id="emailTo"></span></h4>
+
+  <script>
+    async function submitQuery() {
+      const message = document.getElementById("message").value;
+      const response = await fetch("http://127.0.0.1:8000/process", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: message })
+        })
+      const data = await response.json();
+      document.getElementById("english").innerText = data.english_draft;
+      document.getElementById("hindi").innerText = data.hindi_draft;
+      document.getElementById("emailTo").innerText = data.email_to;
+    }
+  </script>
+</body>
+</html> -->

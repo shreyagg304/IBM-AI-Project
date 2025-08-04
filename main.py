@@ -3,8 +3,20 @@ from pydantic import BaseModel
 from googletrans import Translator
 import json
 
+
 app = FastAPI()
 translator = Translator()
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or ["http://localhost:5500"] for stricter control
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 with open("contacts.json", "r", encoding="utf-8") as f:
     contacts = json.load(f)
