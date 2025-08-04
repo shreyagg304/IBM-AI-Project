@@ -1,0 +1,35 @@
+<!-- frontend/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Agent</title>
+</head>
+<body>
+  <h2>Enter your problem (in Hindi or English)</h2>
+  <textarea id="message" rows="6" cols="60"></textarea><br>
+  <button onclick="submitQuery()">Submit</button>
+
+  <h3>Formal Email (English)</h3>
+  <pre id="english"></pre>
+
+  <h3>Formal Email (Hindi)</h3>
+  <pre id="hindi"></pre>
+
+  <h4>Email will be sent to: <span id="emailTo"></span></h4>
+
+  <script>
+    async function submitQuery() {
+      const message = document.getElementById("message").value;
+      const response = await fetch("http://localhost:8000/process", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message})
+      });
+      const data = await response.json();
+      document.getElementById("english").innerText = data.english_draft;
+      document.getElementById("hindi").innerText = data.hindi_draft;
+      document.getElementById("emailTo").innerText = data.email_to;
+    }
+  </script>
+</body>
+</html>

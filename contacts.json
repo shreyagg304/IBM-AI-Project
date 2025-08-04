@@ -1,0 +1,10 @@
+{
+  "water": {
+    "Delhi": "delhi.water@gov.in",
+    "Mumbai": "mumbai.water@gov.in"
+  },
+  "electricity": {
+    "Delhi": "delhi.electricity@gov.in",
+    "Mumbai": "mumbai.electricity@gov.in"
+  }
+}
