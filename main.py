@@ -1,28 +1,38 @@
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from googletrans import Translator
+from fastapi.middleware.cors import CORSMiddleware
 import json
-
+import os
 
 app = FastAPI()
 translator = Translator()
 
-from fastapi.middleware.cors import CORSMiddleware
+with open("contacts.json", "r", encoding="utf-8") as f:
+    contacts = json.load(f)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or ["http://localhost:5500"] for stricter control
+    allow_origins=["*"],  # Or specify your frontend origin like ["http://localhost:5500"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-with open("contacts.json", "r", encoding="utf-8") as f:
-    contacts = json.load(f)
-
 class Query(BaseModel):
     message: str
+
+# Serve the frontend folder (static files if you have CSS/JS later)
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+# Serve index.html at root
+@app.get("/")
+def read_index():
+    index_path = os.path.join("frontend", "index.html")
+    return FileResponse(index_path)
+
 
 @app.post("/process")
 def process(query: Query):
